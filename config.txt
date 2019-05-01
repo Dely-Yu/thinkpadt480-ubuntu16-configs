@@ -1,0 +1,50 @@
+电池管理:
+sudo add-apt-repository ppa:linrunner/tlp
+sudo apt-get install tlp tlp-rdw
+sudo apt-get install tp-smapi-dkms acpi-call-tools acpi-call-dkms
+
+编辑配置文件:sudo vim  /etc/default/tlp
+对磁盘进行设置，减小活跃度可以解决磁盘温度过高的问题。
+对双电池进行阈值设置。
+
+启用tlp电源管理 sudo tlp start
+查看当前状态 sudo tlp-stat
+sudo tlp-stat --battery
+
+小红点设置:
+首先在终端下取得小红点的ID：
+$ xinput list | grep TrackPoint
+TPPS/2 IBM TrackPoint                   	id=13	[slave  pointer  (2)]
+$ xinput list-props 13
+Device 'TPPS/2 IBM TrackPoint':
+	Device Enabled (143):	1
+	Coordinate Transformation Matrix (145):	1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000
+	Device Accel Profile (269):	0
+	Device Accel Constant Deceleration (270):	1.000000
+	Device Accel Adaptive Deceleration (271):	1.000000
+	Device Accel Velocity Scaling (272):	10.000000
+	Device Product ID (263):	2, 10
+	Device Node (264):	"/dev/input/event7"
+	Evdev Axis Inversion (309):	0, 0
+	Evdev Axes Swap (311):	0
+	Axis Labels (312):	"Rel X" (153), "Rel Y" (154)
+	Button Labels (313):	"Button Left" (146), "Button Middle" (147), "Button Right" (148), "Button Wheel Up" (149), "Button Wheel Down" (150), "Button Horiz Wheel Left" (151), "Button Horiz Wheel Right" (152)
+	Evdev Scrolling Distance (314):	0, 0, 0
+	Evdev Middle Button Emulation (315):	1
+	Evdev Middle Button Timeout (316):	50
+	Evdev Middle Button Button (317):	2
+	Evdev Third Button Emulation (318):	0
+	Evdev Third Button Emulation Timeout (319):	1000
+	Evdev Third Button Emulation Button (320):	3
+	Evdev Third Button Emulation Threshold (321):	20
+	Evdev Wheel Emulation (322):	1
+	Evdev Wheel Emulation Axes (323):	6, 7, 4, 5
+	Evdev Wheel Emulation Inertia (324):	10
+	Evdev Wheel Emulation Timeout (325):	200
+	Evdev Wheel Emulation Button (326):	2
+	Evdev Drag Lock Buttons (327):	0
+
+经过调试，选择合适的参数配置:$ xinput set-prop 13 270 0.4
+$ xinput set-prop 13 271 25。 为了在保持设置，将两条语句添加到~/.bashrc中
+
+
